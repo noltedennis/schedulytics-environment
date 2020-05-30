@@ -148,6 +148,6 @@ steps:
     id: 'Apply traefik routes configuration'
     args:
       - 'apply'
-      - '--filename=./treafik/routes.yaml'
+      - '--filename=./traefik/routes.yaml'
     env:
       - KUBECONFIG=/workspace/.kube/config
