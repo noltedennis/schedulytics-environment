@@ -137,7 +137,7 @@ steps:
 
   # Apply additional configuration
   - name: 'gcr.io/cloud-builders/gke-deploy'
-    id: 'Apply deploy'
+    id: 'Apply cert-manager certificate configuration'
     args:
       - 'apply'
       - '--filename=./cert-manager/certs.yaml'
@@ -145,7 +145,7 @@ steps:
       - KUBECONFIG=/workspace/.kube/config
 
   - name: 'gcr.io/cloud-builders/gke-deploy'
-    id: 'Apply deploy'
+    id: 'Apply traefik routes configuration'
     args:
       - 'apply'
       - '--filename=./treafik/routes.yaml'
