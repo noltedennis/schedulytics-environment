@@ -1,0 +1,94 @@
+---
+# Must be named default in the current Traefik configuration
+apiVersion: traefik.containo.us/v1alpha1
+kind: TLSStore
+metadata:
+  name: default
+  namespace: default
+spec:
+  defaultCertificate:
+    secretName: denolte-com-tls
+
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: cors
+  namespace: default
+spec:
+  headers:
+    accessControlAllowMethods:
+      - "GET"
+      - "OPTIONS"
+      - "PUT"
+      - "POST"
+      - "DELETE"
+    accessControlAllowOrigin: "*"
+    accessControlAllowHeaders:
+      - "x-user-agent"
+      - "x-grpc-web"
+      - "content-type"
+
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: dashboard
+  namespace: default
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`traefik.denolte.com`)
+      kind: Rule
+      services:
+        - name: api@internal
+          kind: TraefikService
+  tls:
+    store: 
+      name: default
+
+---
+# API of schedulytics server
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: schedulytics-envoy
+  namespace: default
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`api.denolte.com`)
+      kind: Rule
+      services:
+        - name: envoy
+          namespace: default
+          port: 8020
+      middlewares:
+        - name: cors
+          namespace: default
+  tls:
+    store: 
+      name: default
+
+---
+# Envoy Admin UI
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: schedulytics-envoy-admin
+  namespace: default
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`envoy.denolte.com`)
+      kind: Rule
+      services:
+        - name: envoy
+          namespace: default
+          port: 9901
+  tls:
+    store: 
+      name: default

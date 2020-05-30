@@ -1,0 +1,79 @@
+replicaCount: 1
+
+service:
+  enabled: true
+  name: envoy
+  type: ClusterIP
+  ports:
+    admin:
+      port: 9901
+      targetPort: admin
+      protocol: TCP
+    n0:
+      port: 8020
+      targetPort: n0
+      protocol: TCP
+
+ports:
+  admin:
+    containerPort: 9901
+    protocol: TCP
+  n0:
+    containerPort: 8020
+    protocol: TCP
+
+files:
+  envoy.yaml: |-
+    admin:
+      access_log_path: /dev/stdout
+      address:
+        socket_address:
+          address: 0.0.0.0
+          port_value: 9901
+
+    static_resources:
+      listeners:
+      - name: listener_0
+        address:
+          socket_address:
+            address: 0.0.0.0
+            port_value: 8020
+        filter_chains:
+        - filters:
+          - name: envoy.http_connection_manager
+            config:
+              codec_type: auto
+              stat_prefix: ingress_http
+              route_config:
+                name: local_route
+                virtual_hosts:
+                - name: local_service
+                  domains: ["*"]
+                  routes:
+                  - match: { prefix: "/" }
+                    route:
+                      cluster: grpc_service
+                      max_grpc_timeout: 0s
+                  cors:
+                    allow_origin_string_match:
+                      - safe_regex:
+                          google_re2: {}
+                          regex: \*
+                    allow_methods: GET, PUT, DELETE, POST, OPTIONS
+                    allow_headers: keep-alive,user-agent,cache-control,content-type,content-transfer-encoding,x-accept-content-transfer-encoding,x-accept-response-streaming,x-user-agent,x-grpc-web
+                    max_age: "1728000"
+                    expose_headers: grpc-status,grpc-message
+              http_filters:
+              - name: envoy.grpc_web
+              - name: envoy.cors
+              - name: envoy.router
+      clusters:
+      - name: grpc_service
+        connect_timeout: 0.25s
+        type: logical_dns
+        http2_protocol_options: {}
+        lb_policy: round_robin
+        hosts: [{ socket_address: { address: schedulytics-server, port_value: 8010 }}]
+        upstream_connection_options:
+          tcp_keepalive:
+            keepalive_time: 300

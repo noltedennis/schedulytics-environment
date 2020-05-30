@@ -1,0 +1,29 @@
+# Default values for go-k8s.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+replicaCount: 1
+
+image:
+  repository: dennisnolte/schedulytics-server 
+  tag: 0.1.0
+  pullPolicy: IfNotPresent
+
+service:
+  name: schedulytics-server
+  type: NodePort
+  externalPort: 8010
+  internalPort: 8010
+
+resources:
+  limits:
+    cpu: 100m
+    memory: 128Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+database:
+  host: mongodb
+  port: 27017
+  username: schedulytics
+  password: sdgl354053fdks
