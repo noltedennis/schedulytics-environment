@@ -1,0 +1,130 @@
+timeout: 1200s
+substitutions:
+  _CUSTOM_REGION: europe-west3-a
+  _CUSTOM_CLUSTER: schedulytics
+steps:
+  # PREPARATION of kubectl and helm
+  - name: gcr.io/cloud-builders/kubectl
+    id: Configure kubectl
+    args:
+      - cluster-info
+    env:
+      - CLOUDSDK_COMPUTE_REGION=$_CUSTOM_REGION
+      - CLOUDSDK_CONTAINER_CLUSTER=$_CUSTOM_CLUSTER
+      - KUBECONFIG=/workspace/.kube/config
+
+  - name: gcr.io/$PROJECT_ID/helm
+    id: Add jetstack repository for cert-manager
+    args:
+      - repo
+      - add
+      - jetstack
+      - https://charts.jetstack.io
+    env:
+      - KUBECONFIG=/workspace/.kube/config
+      - TILLERLESS=true
+
+  - name: gcr.io/$PROJECT_ID/helm
+    id: Add traefik repository for traefik
+    args:
+      - repo
+      - add
+      - traefik
+      - https://containous.github.io/traefik-helm-chart
+    env:
+      - KUBECONFIG=/workspace/.kube/config
+      - TILLERLESS=true
+
+  - name: gcr.io/$PROJECT_ID/helm
+    id: Add bitnami repository for mongodb
+    args:
+      - repo
+      - add
+      - bitnami
+      - https://charts.bitnami.com/bitnami
+    env:
+      - KUBECONFIG=/workspace/.kube/config
+      - TILLERLESS=true
+
+  # DEPLOYMENT of environment
+  - name: gcr.io/$PROJECT_ID/helm
+    id: Deploy cert-manager
+    args:
+      - upgrade
+      - -i
+      - --name
+      - cert-manager
+      - --namespace
+      - cert-manager
+      - jetstack/cert-manager
+      - -f
+      - ./cert-manager/values.yaml
+      - --version
+      - v0.15.1
+    env:
+      - KUBECONFIG=/workspace/.kube/config
+      - TILLERLESS=true
+
+  - name: gcr.io/$PROJECT_ID/helm
+    id: Deploy traefik
+    args:
+      - upgrade
+      - -i
+      - --name
+      - traefik
+      - --namespace
+      - default
+      - traefik/traefik
+      - -f
+      - ./traefik/values.yaml
+    env:
+      - KUBECONFIG=/workspace/.kube/config
+      - TILLERLESS=true
+
+  - name: gcr.io/$PROJECT_ID/helm
+    id: Deploy mongodb
+    args:
+      - upgrade
+      - -i
+      - --name
+      - mongodb
+      - --namespace
+      - default
+      - bitnami/mongodb
+      - -f
+      - ./mongodb/values.yaml
+    env:
+      - KUBECONFIG=/workspace/.kube/config
+      - TILLERLESS=true
+
+  - name: gcr.io/$PROJECT_ID/helm
+    id: Deploy schedulytics-grpc-server
+    args:
+      - upgrade
+      - -i
+      - --name
+      - schedulytics-grpc-server
+      - --namespace
+      - default
+      - ./schedulytics-grpc-server
+      - -f
+      - ./schedulytics-grpc-server/values.yaml
+    env:
+      - KUBECONFIG=/workspace/.kube/config
+      - TILLERLESS=true
+
+  - name: gcr.io/$PROJECT_ID/helm
+    id: Deploy envoy
+    args:
+      - upgrade
+      - -i
+      - --name
+      - envoy
+      - --namespace
+      - default
+      - stable/envoy
+      - -f
+      - ./envoy/values.yaml
+    env:
+      - KUBECONFIG=/workspace/.kube/config
+      - TILLERLESS=true

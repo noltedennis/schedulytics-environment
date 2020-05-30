@@ -1,4 +1,0 @@
-apiVersion: v1
-description: The Schedulytics Server component
-name: schedulytics-server
-version: 0.1.0
