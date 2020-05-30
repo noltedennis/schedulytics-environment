@@ -47,4 +47,4 @@ service:
   enabled: true
   type: LoadBalancer
   spec:
-    loadBalancerIP: "34.89.172.7"
+    loadBalancerIP: "35.246.139.245"
