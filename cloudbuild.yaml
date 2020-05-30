@@ -52,7 +52,6 @@ steps:
     args:
       - upgrade
       - -i
-      - --name
       - cert-manager
       - --namespace
       - cert-manager
@@ -70,7 +69,6 @@ steps:
     args:
       - upgrade
       - -i
-      - --name
       - traefik
       - --namespace
       - default
@@ -86,7 +84,6 @@ steps:
     args:
       - upgrade
       - -i
-      - --name
       - mongodb
       - --namespace
       - default
@@ -102,7 +99,6 @@ steps:
     args:
       - upgrade
       - -i
-      - --name
       - schedulytics-grpc-server
       - --namespace
       - default
@@ -118,7 +114,6 @@ steps:
     args:
       - upgrade
       - -i
-      - --name
       - envoy
       - --namespace
       - default
