@@ -46,6 +46,17 @@ steps:
       - KUBECONFIG=/workspace/.kube/config
       - TILLERLESS=true
 
+  - name: gcr.io/$PROJECT_ID/helm
+    id: Add stable repository for envoy
+    args:
+      - repo
+      - add
+      - stable
+      - https://kubernetes-charts.storage.googleapis.com/
+    env:
+      - KUBECONFIG=/workspace/.kube/config
+      - TILLERLESS=true
+
   # DEPLOYMENT of environment
   - name: gcr.io/$PROJECT_ID/helm
     id: Deploy cert-manager
@@ -123,3 +134,20 @@ steps:
     env:
       - KUBECONFIG=/workspace/.kube/config
       - TILLERLESS=true
+
+  # Apply additional configuration
+  - name: 'gcr.io/cloud-builders/gke-deploy'
+    id: 'Apply deploy'
+    args:
+      - 'apply'
+      - '--filename=./cert-manager/certs.yaml'
+    env:
+      - KUBECONFIG=/workspace/.kube/config
+
+  - name: 'gcr.io/cloud-builders/gke-deploy'
+    id: 'Apply deploy'
+    args:
+      - 'apply'
+      - '--filename=./treafik/routes.yaml'
+    env:
+      - KUBECONFIG=/workspace/.kube/config
