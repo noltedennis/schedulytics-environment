@@ -106,6 +106,21 @@ steps:
       - TILLERLESS=true
 
   - name: gcr.io/$PROJECT_ID/helm
+    id: Deploy schedulytics-frontend
+    args:
+      - upgrade
+      - -i
+      - schedulytics-frontend
+      - --namespace
+      - default
+      - ./schedulytics-frontend
+      - -f
+      - ./schedulytics-frontend/values.yaml
+    env:
+      - KUBECONFIG=/workspace/.kube/config
+      - TILLERLESS=true
+
+  - name: gcr.io/$PROJECT_ID/helm
     id: Deploy schedulytics-grpc-server
     args:
       - upgrade

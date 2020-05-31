@@ -49,6 +49,27 @@ spec:
       name: default
 
 ---
+# Schedulytics frontend
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: schedulytics-frontend
+  namespace: default
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`schedulytics.denolte.com`)
+      kind: Rule
+      services:
+        - name: schedulytics-frontend
+          namespace: default
+          port: 80
+  tls:
+    store: 
+      name: default
+
+---
 # API of schedulytics server
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
