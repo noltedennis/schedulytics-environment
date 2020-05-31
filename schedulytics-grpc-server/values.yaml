@@ -4,8 +4,8 @@
 replicaCount: 1
 
 image:
-  repository: dennisnolte/schedulytics-server 
-  tag: 0.1.0
+  repository: gcr.io/schedulytics/schedulytics-grpc-server
+  tag: 
   pullPolicy: IfNotPresent
 
 service:
