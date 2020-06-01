@@ -1,0 +1,4 @@
+secretGenerator:
+- name: clouddns-dns01-solver-svc-acct
+  files:
+  - ../secrets/schedulytics-cert-manager-sa

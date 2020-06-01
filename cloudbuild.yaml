@@ -72,8 +72,9 @@ steps:
   - name: 'gcr.io/cloud-builders/gke-deploy'
     id: 'Create required Kubernetes secrets'
     args:
-      - 'apply'
-      - '--filename=./cert-manager/secrets.yaml'
+      - apply
+      - -k
+      - ./cert-manager/kustomization.yaml
     env:
       - KUBECONFIG=/workspace/.kube/config
       - SCHEDULYTICS_CERT_MANAGER_SA=$(cat secrets/schedulytics-cert-manager-sa | base64)
