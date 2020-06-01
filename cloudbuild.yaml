@@ -76,7 +76,7 @@ steps:
       - '--filename=./cert-manager/secrets.yaml'
     env:
       - KUBECONFIG=/workspace/.kube/config
-      - SCHEDULYTICS_CERT_MANAGER_SA=$(cat secrets/schedulytics-cert-manager-sa)
+      - SCHEDULYTICS_CERT_MANAGER_SA=$(cat secrets/schedulytics-cert-manager-sa | base64)
   
   # DEPLOYMENT of environment
   - name: gcr.io/$PROJECT_ID/helm
