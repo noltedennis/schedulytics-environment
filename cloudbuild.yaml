@@ -123,9 +123,9 @@ steps:
       - -f
       - ./mongodb/values.yaml
       - --set
-      - mongodbRootPassword=${MONGODB_ROOT_PW}
+      - mongodbRootPassword=$$MONGODB_ROOT_PW
       - --set
-      - mongodbPassword=${MONGODB_USER_PW}
+      - mongodbPassword=$$MONGODB_USER_PW
     env:
       - KUBECONFIG=/workspace/.kube/config
       - TILLERLESS=true
@@ -159,7 +159,7 @@ steps:
       - -f
       - ./schedulytics-grpc-server/values.yaml
       - --set
-      - database.password=${MONGODB_USER_PW}
+      - database.password=$$MONGODB_USER_PW
     env:
       - KUBECONFIG=/workspace/.kube/config
       - TILLERLESS=true
