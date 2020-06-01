@@ -13,10 +13,10 @@ service:
   internalPort: 8010
 resources:
   limits:
-    cpu: 100m
+    cpu: 50m
     memory: 128Mi
   requests:
-    cpu: 100m
+    cpu: 50m
     memory: 128Mi
 database:
   host: mongodb
