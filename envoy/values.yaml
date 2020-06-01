@@ -77,3 +77,11 @@ files:
         upstream_connection_options:
           tcp_keepalive:
             keepalive_time: 300
+
+resources:
+  limits:
+    cpu: 100m
+    memory: 128Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi

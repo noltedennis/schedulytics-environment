@@ -48,3 +48,11 @@ service:
   type: LoadBalancer
   spec:
     loadBalancerIP: "35.246.139.245"
+
+resources:
+  limits:
+    cpu: 100m
+    memory: 128Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
