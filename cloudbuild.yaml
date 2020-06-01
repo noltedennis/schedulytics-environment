@@ -64,8 +64,9 @@ steps:
     args: 
       - '-c'
       - | 
+          kubectl version
           mkdir secrets
-          gcloud secrets versions access latest --secret=schedulytics-environment-ssh > secrets/schedulytics-cert-manager-sa
+          gcloud secrets versions access latest --secret=schedulytics-environment-ssh > secrets/key.json
           gcloud secrets versions access latest --secret=schedulytics-mongodb-root-password	> secrets/schedulytics-mongodb-root-password
           gcloud secrets versions access latest --secret=schedulytics-mongodb-user-password > secrets/schedulytics-mongodb-user-password
 
@@ -74,10 +75,9 @@ steps:
     args:
       - apply
       - -k
-      - ./cert-manager/kustomization.yaml
+      - ./cert-manager
     env:
       - KUBECONFIG=/workspace/.kube/config
-      - SCHEDULYTICS_CERT_MANAGER_SA=$(cat secrets/schedulytics-cert-manager-sa | base64)
   
   # DEPLOYMENT of environment
   - name: gcr.io/$PROJECT_ID/helm
