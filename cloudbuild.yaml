@@ -123,14 +123,12 @@ steps:
       - -f
       - ./mongodb/values.yaml
       - --set
-      - mongodbRootPassword=$$MONGODB_ROOT_PW
+      - mongodbRootPassword=$(cat secrets/schedulytics-mongodb-root-password)
       - --set
-      - mongodbPassword=$$MONGODB_USER_PW
+      - mongodbPassword=$(cat secrets/schedulytics-mongodb-user-password)
     env:
       - KUBECONFIG=/workspace/.kube/config
       - TILLERLESS=true
-      - MONGODB_ROOT_PW=$(cat secrets/schedulytics-mongodb-root-password)
-      - MONGODB_USER_PW=$(cat secrets/schedulytics-mongodb-user-password)
 
   - name: gcr.io/$PROJECT_ID/helm
     id: Deploy schedulytics-frontend
@@ -159,11 +157,10 @@ steps:
       - -f
       - ./schedulytics-grpc-server/values.yaml
       - --set
-      - database.password=$$MONGODB_USER_PW
+      - database.password=$(cat secrets/schedulytics-mongodb-user-password)
     env:
       - KUBECONFIG=/workspace/.kube/config
       - TILLERLESS=true
-      - MONGODB_USER_PW=$(cat secrets/schedulytics-mongodb-user-password)
 
   - name: gcr.io/$PROJECT_ID/helm
     id: Deploy envoy
