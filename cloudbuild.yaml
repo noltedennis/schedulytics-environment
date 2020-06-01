@@ -57,6 +57,27 @@ steps:
       - KUBECONFIG=/workspace/.kube/config
       - TILLERLESS=true
 
+  # Provide secrets
+  - name: gcr.io/cloud-builders/gcloud
+    id: Acquire secrets from SecretManager
+    entrypoint: 'bash'
+    args: 
+      - '-c'
+      - | 
+          mkdir secrets
+          gcloud secrets versions access latest --secret=schedulytics-environment-ssh > secrets/schedulytics-cert-manager-sa
+          gcloud secrets versions access latest --secret=schedulytics-mongodb-root-password	> secrets/schedulytics-mongodb-root-password
+          gcloud secrets versions access latest --secret=schedulytics-mongodb-user-password > secrets/schedulytics-mongodb-user-password
+
+  - name: 'gcr.io/cloud-builders/gke-deploy'
+    id: 'Create required Kubernetes secrets'
+    args:
+      - 'apply'
+      - '--filename=./cert-manager/secrets.yaml'
+    env:
+      - KUBECONFIG=/workspace/.kube/config
+      - SCHEDULYTICS_CERT_MANAGER_SA=$(cat secrets/schedulytics-cert-manager-sa)
+  
   # DEPLOYMENT of environment
   - name: gcr.io/$PROJECT_ID/helm
     id: Deploy cert-manager
@@ -101,9 +122,15 @@ steps:
       - bitnami/mongodb
       - -f
       - ./mongodb/values.yaml
+      - --set
+      - mongodbRootPassword=${MONGODB_ROOT_PW}
+      - --set
+      - mongodbPassword=${MONGODB_USER_PW}
     env:
       - KUBECONFIG=/workspace/.kube/config
       - TILLERLESS=true
+      - MONGODB_ROOT_PW=$(cat secrets/schedulytics-mongodb-root-password)
+      - MONGODB_USER_PW=$(cat secrets/schedulytics-mongodb-user-password)
 
   - name: gcr.io/$PROJECT_ID/helm
     id: Deploy schedulytics-frontend
@@ -131,9 +158,12 @@ steps:
       - ./schedulytics-grpc-server
       - -f
       - ./schedulytics-grpc-server/values.yaml
+      - --set
+      - database.password=${MONGODB_USER_PW}
     env:
       - KUBECONFIG=/workspace/.kube/config
       - TILLERLESS=true
+      - MONGODB_USER_PW=$(cat secrets/schedulytics-mongodb-user-password)
 
   - name: gcr.io/$PROJECT_ID/helm
     id: Deploy envoy
