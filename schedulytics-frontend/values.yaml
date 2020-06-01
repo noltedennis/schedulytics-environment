@@ -4,7 +4,7 @@
 replicaCount: 1
 image:
   repository: gcr.io/schedulytics-278820/schedulytics-frontend
-  tag: 
+  tag: 65afe68af8abc2f6aff27da980886a8c5475daa0
   pullPolicy: IfNotPresent
 service:
   name: schedulytics-frontend
