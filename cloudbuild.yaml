@@ -75,7 +75,7 @@ steps:
     id: Template cert-manager
     args:
       - template
-      - --name cert-manager
+      - cert-manager
       - --namespace cert-manager
       - -f ./bases/cert-manager/values.yaml
       - --version v0.15.1
@@ -89,7 +89,7 @@ steps:
     id: Template traefik
     args:
       - template
-      - --name traefik
+      - traefik
       - --namespace default
       - -f ./bases/traefik/values.yaml
       - traefik/traefik
@@ -102,7 +102,7 @@ steps:
     id: Template envoy
     args:
       - template
-      - --name envoy
+      - envoy
       - --namespace default
       - -f ./bases/envoy/values.yaml
       - stable/envoy
@@ -115,7 +115,7 @@ steps:
     id: Template mongodb
     args:
       - template
-      - --name mongodb
+      - mongodb
       - --namespace default
       - -f ./bases/mongodb/values.yaml
       - bitnami/mongodb
@@ -128,7 +128,7 @@ steps:
     id: Template schedulytics-frontend
     args:
       - template
-      - --name schedulytics-frontend
+      - schedulytics-frontend
       - --namespace default
       - -f ./bases/schedulytics-frontend/values.yaml
       - ./bases/schedulytics-frontend
@@ -141,7 +141,7 @@ steps:
     id: Template schedulytics-grpc-server
     args:
       - template
-      - --name schedulytics-grpc-server
+      - schedulytics-grpc-server
       - --namespace default
       - -f ./bases/schedulytics-grpc-server/values.yaml
       - ./bases/schedulytics-grpc-server
