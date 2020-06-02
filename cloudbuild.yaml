@@ -63,7 +63,7 @@ steps:
     name: gcr.io/cloud-builders/gcloud
     entrypoint: 'bash'
     args: 
-      - '-c'
+      - -c
       - | 
           mkdir secrets
           gcloud secrets versions access latest --secret=schedulytics-environment-ssh > secrets/key.json
@@ -92,7 +92,7 @@ steps:
     name: gcr.io/$PROJECT_ID/helm
     entrypoint: /bin/bash
     args:
-      - c
+      - -c
       - >
         helm template traefik
         --namespace default
