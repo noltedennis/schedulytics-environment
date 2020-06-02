@@ -2,6 +2,7 @@ timeout: 1200s
 substitutions:
   _CUSTOM_REGION: europe-west3-a
   _CUSTOM_CLUSTER: schedulytics
+
 steps:
   # PREPARATION of kubectl and helm
   - name: gcr.io/cloud-builders/kubectl
@@ -64,133 +65,97 @@ steps:
     args: 
       - '-c'
       - | 
-          kubectl version
           mkdir secrets
           gcloud secrets versions access latest --secret=schedulytics-environment-ssh > secrets/key.json
           gcloud secrets versions access latest --secret=schedulytics-mongodb-root-password	> secrets/schedulytics-mongodb-root-password
           gcloud secrets versions access latest --secret=schedulytics-mongodb-user-password > secrets/schedulytics-mongodb-user-password
-
-  - name: 'gcr.io/cloud-builders/gke-deploy'
-    id: 'Create required Kubernetes secrets'
-    args:
-      - apply
-      - -k
-      - ./cert-manager
-    env:
-      - KUBECONFIG=/workspace/.kube/config
   
-  # DEPLOYMENT of environment
+  # Templating via Helm
   - name: gcr.io/$PROJECT_ID/helm
-    id: Deploy cert-manager
+    id: Template cert-manager
     args:
-      - upgrade
-      - -i
-      - cert-manager
-      - --namespace
-      - cert-manager
+      - template
+      - --name cert-manager
+      - --namespace cert-manager
+      - -f ./bases/cert-manager/values.yaml
+      - --version v0.15.1
       - jetstack/cert-manager
-      - -f
-      - ./cert-manager/values.yaml
-      - --version
-      - v0.15.1
+      - '> ./bases/cert-manager/helm.yaml'
     env:
       - KUBECONFIG=/workspace/.kube/config
       - TILLERLESS=true
 
   - name: gcr.io/$PROJECT_ID/helm
-    id: Deploy traefik
+    id: Template traefik
     args:
-      - upgrade
-      - -i
-      - traefik
-      - --namespace
-      - default
+      - template
+      - --name traefik
+      - --namespace default
+      - -f ./bases/traefik/values.yaml
       - traefik/traefik
-      - -f
-      - ./traefik/values.yaml
+      - '> ./bases/traefik/helm.yaml'
     env:
       - KUBECONFIG=/workspace/.kube/config
       - TILLERLESS=true
 
   - name: gcr.io/$PROJECT_ID/helm
-    id: Deploy mongodb
+    id: Template envoy
     args:
-      - upgrade
-      - -i
-      - mongodb
-      - --namespace
-      - default
-      - bitnami/mongodb
-      - -f
-      - ./mongodb/values.yaml
-      - --set
-      - mongodbRootPassword=$(cat secrets/schedulytics-mongodb-root-password)
-      - --set
-      - mongodbPassword=$(cat secrets/schedulytics-mongodb-user-password)
-    env:
-      - KUBECONFIG=/workspace/.kube/config
-      - TILLERLESS=true
-
-  - name: gcr.io/$PROJECT_ID/helm
-    id: Deploy schedulytics-frontend
-    args:
-      - upgrade
-      - -i
-      - schedulytics-frontend
-      - --namespace
-      - default
-      - ./schedulytics-frontend
-      - -f
-      - ./schedulytics-frontend/values.yaml
-    env:
-      - KUBECONFIG=/workspace/.kube/config
-      - TILLERLESS=true
-
-  - name: gcr.io/$PROJECT_ID/helm
-    id: Deploy schedulytics-grpc-server
-    args:
-      - upgrade
-      - -i
-      - schedulytics-grpc-server
-      - --namespace
-      - default
-      - ./schedulytics-grpc-server
-      - -f
-      - ./schedulytics-grpc-server/values.yaml
-      - --set
-      - database.password=$(cat secrets/schedulytics-mongodb-user-password)
-    env:
-      - KUBECONFIG=/workspace/.kube/config
-      - TILLERLESS=true
-
-  - name: gcr.io/$PROJECT_ID/helm
-    id: Deploy envoy
-    args:
-      - upgrade
-      - -i
-      - envoy
-      - --namespace
-      - default
+      - template
+      - --name envoy
+      - --namespace default
+      - -f ./bases/envoy/values.yaml
       - stable/envoy
-      - -f
-      - ./envoy/values.yaml
+      - '> ./bases/envoy/helm.yaml'
     env:
       - KUBECONFIG=/workspace/.kube/config
       - TILLERLESS=true
 
-  # Apply additional configuration
-  - name: 'gcr.io/cloud-builders/gke-deploy'
-    id: 'Apply cert-manager certificate configuration'
+  - name: gcr.io/$PROJECT_ID/helm
+    id: Template mongodb
     args:
-      - 'apply'
-      - '--filename=./cert-manager/certs.yaml'
+      - template
+      - --name mongodb
+      - --namespace default
+      - -f ./bases/mongodb/values.yaml
+      - bitnami/mongodb
+      - '> ./bases/mongodb/helm.yaml'
     env:
       - KUBECONFIG=/workspace/.kube/config
+      - TILLERLESS=true
 
-  - name: 'gcr.io/cloud-builders/gke-deploy'
-    id: 'Apply traefik routes configuration'
+  - name: gcr.io/$PROJECT_ID/helm
+    id: Template schedulytics-frontend
     args:
-      - 'apply'
-      - '--filename=./traefik/routes.yaml'
+      - template
+      - --name schedulytics-frontend
+      - --namespace default
+      - -f ./bases/schedulytics-frontend/values.yaml
+      - ./bases/schedulytics-frontend
+      - '> ./bases/schedulytics-frontend/helm.yaml'
     env:
+      - KUBECONFIG=/workspace/.kube/config
+      - TILLERLESS=true
+
+  - name: gcr.io/$PROJECT_ID/helm
+    id: Template schedulytics-grpc-server
+    args:
+      - template
+      - --name schedulytics-grpc-server
+      - --namespace default
+      - -f ./bases/schedulytics-grpc-server/values.yaml
+      - ./bases/schedulytics-grpc-server
+      - '> ./bases/schedulytics-grpc-server/helm.yaml'
+    env:
+      - KUBECONFIG=/workspace/.kube/config
+      - TILLERLESS=true
+
+  # DEPLOY via kustomize
+  - id: Deploy PROD configuration via Kustomize
+    name: 'gcr.io/$PROJECT_ID/kustomize'
+    args:
+    - build
+    - overlays/prod
+    env:
+      - APPLY=true
       - KUBECONFIG=/workspace/.kube/config

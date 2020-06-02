@@ -4,6 +4,10 @@
 # because instead of overwriting the secrets during the build process,
 # it will use the defaults values we set in the values.yaml of the
 # respective charts.
+#
+# Requires:
+#   kubectl (v1.x or higher)
+#   helm
 #########################################################################
 
 # Set secrets to be used during deployment
