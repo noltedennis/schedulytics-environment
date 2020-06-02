@@ -76,8 +76,11 @@ steps:
     args:
       - template
       - cert-manager
-      - --namespace cert-manager
-      - -f ./bases/cert-manager/values.yaml
+      - --create-namespace
+      - --namespace
+      - cert-manager
+      - -f
+      - ./bases/cert-manager/values.yaml
       - --version v0.15.1
       - jetstack/cert-manager
       - '> ./bases/cert-manager/helm.yaml'
@@ -90,8 +93,10 @@ steps:
     args:
       - template
       - traefik
-      - --namespace default
-      - -f ./bases/traefik/values.yaml
+      - --namespace
+      - default
+      - -f
+      - ./bases/traefik/values.yaml
       - traefik/traefik
       - '> ./bases/traefik/helm.yaml'
     env:
@@ -103,8 +108,10 @@ steps:
     args:
       - template
       - envoy
-      - --namespace default
-      - -f ./bases/envoy/values.yaml
+      - --namespace
+      - default
+      - -f
+      - ./bases/envoy/values.yaml
       - stable/envoy
       - '> ./bases/envoy/helm.yaml'
     env:
@@ -116,8 +123,10 @@ steps:
     args:
       - template
       - mongodb
-      - --namespace default
-      - -f ./bases/mongodb/values.yaml
+      - --namespace
+      - default
+      - -f
+      - ./bases/mongodb/values.yaml
       - bitnami/mongodb
       - '> ./bases/mongodb/helm.yaml'
     env:
@@ -129,8 +138,10 @@ steps:
     args:
       - template
       - schedulytics-frontend
-      - --namespace default
-      - -f ./bases/schedulytics-frontend/values.yaml
+      - --namespace
+      - default
+      - -f
+      - ./bases/schedulytics-frontend/values.yaml
       - ./bases/schedulytics-frontend
       - '> ./bases/schedulytics-frontend/helm.yaml'
     env:
@@ -142,8 +153,10 @@ steps:
     args:
       - template
       - schedulytics-grpc-server
-      - --namespace default
-      - -f ./bases/schedulytics-grpc-server/values.yaml
+      - --namespace
+      - default
+      - -f
+      - ./bases/schedulytics-grpc-server/values.yaml
       - ./bases/schedulytics-grpc-server
       - '> ./bases/schedulytics-grpc-server/helm.yaml'
     env:
