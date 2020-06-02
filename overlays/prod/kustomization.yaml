@@ -12,6 +12,6 @@ bases:
 secretGenerator:
 - name: clouddns-dns01-solver-svc-acct
   files:
-  - ../../secrets/key.json
+  - secrets/key.json
 generatorOptions:
   disableNameSuffixHash: true

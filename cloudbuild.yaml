@@ -65,10 +65,10 @@ steps:
     args: 
       - -c
       - | 
-          mkdir secrets
-          gcloud secrets versions access latest --secret=schedulytics-environment-ssh > secrets/key.json
-          gcloud secrets versions access latest --secret=schedulytics-mongodb-root-password	> secrets/schedulytics-mongodb-root-password
-          gcloud secrets versions access latest --secret=schedulytics-mongodb-user-password > secrets/schedulytics-mongodb-user-password
+          mkdir overlays/prod/secrets
+          gcloud secrets versions access latest --secret=schedulytics-environment-ssh > overlays/prod/secrets/key.json
+          gcloud secrets versions access latest --secret=schedulytics-mongodb-root-password	> overlays/prod/secrets/schedulytics-mongodb-root-password
+          gcloud secrets versions access latest --secret=schedulytics-mongodb-user-password > overlays/prod/secrets/schedulytics-mongodb-user-password
   
   # Templating via Helm
   - id: Template cert-manager
