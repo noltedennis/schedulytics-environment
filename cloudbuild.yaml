@@ -84,6 +84,7 @@ steps:
       - -c
       - >
         helm upgrade -i cert-manager
+        --debug
         --create-namespace
         --namespace cert-manager
         -f ./charts/cert-manager/values.yaml
