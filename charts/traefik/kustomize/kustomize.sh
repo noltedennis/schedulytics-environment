@@ -1,0 +1,1 @@
+../../../build/kustomize.sh
