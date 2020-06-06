@@ -18,11 +18,10 @@ Output:
 
 Requires:
   - Local installation of kustomize (in PATH)
-  - Python 3.6 or higher
+  - Python 3.5 or higher
   - PyYAML
 """
 
-import io
 import os
 import subprocess
 import sys
@@ -44,7 +43,7 @@ with open(helm_out, 'w') as text_file:
     text_file.write(yaml.dump_all(objects))
 
 # Execute kustomize on that and store result
-kustomize_out = subprocess.check_output(['kubectl', 'kustomize', str(kustomize_dir)], shell=True)
+kustomize_out = subprocess.check_output('kubectl kustomize ' + str(kustomize_dir), shell=True)
 
 # Read results and output them according to priorization
 ordered_kinds = ['CustomResourceDefinition' 'ValidatingWebhookConfiguration']
