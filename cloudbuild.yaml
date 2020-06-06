@@ -90,7 +90,7 @@ steps:
         --namespace cert-manager
         -f values.yaml
         --version v0.15.1
-        --post-renderer /workspace/build/kustomize.py
+        --post-renderer "python3 /workspace/build/kustomize.py"
         jetstack/cert-manager
     env:
       - KUBECONFIG=/workspace/.kube/config
