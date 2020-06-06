@@ -79,14 +79,15 @@ steps:
   # Prepare python
   - id: Get python version
     name: gcr.io/$PROJECT_ID/helm
-    entrypoint: python3
-    args: ['--version']
+    entrypoint: /bin/bash
+    args:
+      - -c
+      - >
+        python3 -m venv build/python
+        source build/python/bin/activate
+        pip install pyyaml
+        ls -ltR build/python
 
-  - id: Prepare python installation
-    name: gcr.io/$PROJECT_ID/helm
-    entrypoint: python3
-    args: ['-m pip install pyyaml']
-  
   # Templating via Helm
   - id: Template cert-manager
     name: gcr.io/$PROJECT_ID/helm
