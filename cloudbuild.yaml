@@ -66,13 +66,13 @@ steps:
     args: 
       - -c
       - | 
-          mkdir charts/cert-manager/kustomize/$${BUILTARGET}/secrets
-          mkdir charts/mongodb/kustomize/$${BUILTARGET}/secrets
-          mkdir charts/schedulytics-grpc-server/kustomize/$${BUILTARGET}/secrets
-          gcloud secrets versions access latest --secret=schedulytics-environment-ssh > charts/cert-manager/kustomize/$${BUILTARGET}/secrets/key.json
-          gcloud secrets versions access latest --secret=schedulytics-mongodb-root-password	> charts/mongodb/kustomize/$${BUILTARGET}/secrets/schedulytics-mongodb-root-password
-          gcloud secrets versions access latest --secret=schedulytics-mongodb-user-password > charts/mongodb/kustomize/$${BUILTARGET}/secrets/schedulytics-mongodb-user-password
-          gcloud secrets versions access latest --secret=schedulytics-mongodb-user-password > charts/schedulytics-grpc-server/kustomize/$${BUILTARGET}/secrets/schedulytics-mongodb-user-password
+          mkdir charts/cert-manager/kustomize/$${BUILDTARGET}/secrets
+          mkdir charts/mongodb/kustomize/$${BUILDTARGET}/secrets
+          mkdir charts/schedulytics-grpc-server/kustomize/$${BUILDTARGET}/secrets
+          gcloud secrets versions access latest --secret=schedulytics-environment-ssh > charts/cert-manager/kustomize/$${BUILDTARGET}/secrets/key.json
+          gcloud secrets versions access latest --secret=schedulytics-mongodb-root-password	> charts/mongodb/kustomize/$${BUILDTARGET}/secrets/schedulytics-mongodb-root-password
+          gcloud secrets versions access latest --secret=schedulytics-mongodb-user-password > charts/mongodb/kustomize/$${BUILDTARGET}/secrets/schedulytics-mongodb-user-password
+          gcloud secrets versions access latest --secret=schedulytics-mongodb-user-password > charts/schedulytics-grpc-server/kustomize/$${BUILDTARGET}/secrets/schedulytics-mongodb-user-password
           ls -ltR  charts/cert-manager/kustomize/
     env:
       - BUILDTARGET=$_CUSTOM_BUILDTARGET
