@@ -66,6 +66,8 @@ steps:
     args: 
       - -c
       - | 
+          python --version
+          pip install pyyaml
           mkdir charts/cert-manager/kustomize/$${BUILDTARGET}/secrets
           mkdir charts/mongodb/kustomize/$${BUILDTARGET}/secrets
           mkdir charts/schedulytics-grpc-server/kustomize/$${BUILDTARGET}/secrets
