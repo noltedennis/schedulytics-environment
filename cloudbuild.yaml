@@ -22,8 +22,9 @@ steps:
     args:
       - -c
       - |
-        apt-get install python3-pip
-        python3 -m pip install pyyaml
+        apt-get install -y python3-pip
+        pip3 install --upgrade pip
+        pip3 install pyyaml
 
   - id: Add jetstack repository for cert-manager
     name: gcr.io/$PROJECT_ID/helm
