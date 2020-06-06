@@ -22,6 +22,7 @@ Requires:
   - PyYAML
 """
 
+import io
 import os
 import subprocess
 import sys
@@ -39,10 +40,8 @@ kustomize_dir = Path('kustomize', build_target)
 # Read stdin and write to file
 helm_out = str(kustomize_dir / 'all.yaml')
 with open(helm_out, 'wb') as text_file:
-    text_file.write(sys.stdin.read().encode('utf8','surrogateescape'))
-
-with open(helm_out, "r") as text_file:
-    print(text_file.readlines())
+    input_stream = io.TextIOWrapper(sys.stdin.buffer, encoding='utf-8')
+    text_file.write(input_stream.read())
 
 # Execute kustomize on that and store result
 kustomize_out = subprocess.check_output(['kubectl', 'kustomize', str(kustomize_dir)], shell=True)
