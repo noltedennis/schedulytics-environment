@@ -107,7 +107,7 @@ steps:
         helm upgrade traefik
         --install
         --create-namespace
-        --namespace treafik
+        --namespace traefik
         -f values.yaml
         --post-renderer /workspace/build/kustomize.sh
         traefik/traefik
