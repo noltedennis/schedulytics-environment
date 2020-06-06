@@ -6,6 +6,10 @@
 # Usage:
 #   STDIN | kustomize.sh
 #
+#  ToDos:
+#    - Change to python for cross-compatibility
+#    - Try to reorder CRDs (https://github.com/Agilicus/kustomize-plugins/tree/master/agilicus/v1/crdgenerator, https://github.com/kubernetes-sigs/kustomize/issues/821)
+#
 # Required environment configuration:
 #   BUILDTARGET         either "local" or "PROD"
 ############################################################################
@@ -22,4 +26,4 @@ KUSTOMIZE_DIR=${DIR}/kustomize/${BUILDTARGET}
 
 cat <&0 > ${KUSTOMIZE_DIR}/all.yaml
 
-kubectl kustomize --reorder kubectlapply ${KUSTOMIZE_DIR}
+kubectl kustomize ${KUSTOMIZE_DIR}
