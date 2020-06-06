@@ -73,7 +73,6 @@ steps:
           gcloud secrets versions access latest --secret=schedulytics-mongodb-root-password	> charts/mongodb/kustomize/$${BUILDTARGET}/secrets/schedulytics-mongodb-root-password
           gcloud secrets versions access latest --secret=schedulytics-mongodb-user-password > charts/mongodb/kustomize/$${BUILDTARGET}/secrets/schedulytics-mongodb-user-password
           gcloud secrets versions access latest --secret=schedulytics-mongodb-user-password > charts/schedulytics-grpc-server/kustomize/$${BUILDTARGET}/secrets/schedulytics-mongodb-user-password
-          ls -ltR  charts/cert-manager/kustomize/
     env:
       - BUILDTARGET=$_CUSTOM_BUILDTARGET
   
@@ -106,8 +105,9 @@ steps:
       - -c
       - >
         helm upgrade -i traefik
+        --debug
         --create-namespace
-        --namespace schedulytics
+        --namespace treafik
         -f values.yaml
         --post-renderer /workspace/build/kustomize.sh
         traefik/traefik
