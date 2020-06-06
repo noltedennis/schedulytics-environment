@@ -84,7 +84,7 @@ steps:
       - -c
       - |
         python3 --version
-        pip3 install pyyaml
+        python3 -m pip install pyyaml
 
   # Templating via Helm
   - id: Template cert-manager
