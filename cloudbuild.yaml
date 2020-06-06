@@ -15,6 +15,17 @@ steps:
       - CLOUDSDK_CONTAINER_CLUSTER=$_CUSTOM_CLUSTER
       - KUBECONFIG=/workspace/.kube/config
 
+    # Prepare python
+  - id: Get python version
+    name: gcr.io/$PROJECT_ID/helm
+    entrypoint: /bin/bash
+    args:
+      - -c
+      - |
+        sudo apt-get install python3-pip
+        python3 --version
+        python3 -m pip install pyyaml
+
   - id: Add jetstack repository for cert-manager
     name: gcr.io/$PROJECT_ID/helm
     args:
@@ -75,16 +86,6 @@ steps:
           gcloud secrets versions access latest --secret=schedulytics-mongodb-user-password > charts/schedulytics-grpc-server/kustomize/$${BUILDTARGET}/secrets/schedulytics-mongodb-user-password
     env:
       - BUILDTARGET=$_CUSTOM_BUILDTARGET
-
-  # Prepare python
-  - id: Get python version
-    name: gcr.io/$PROJECT_ID/helm
-    entrypoint: /bin/bash
-    args:
-      - -c
-      - |
-        python3 --version
-        python3 -m pip install pyyaml
 
   # Templating via Helm
   - id: Template cert-manager
