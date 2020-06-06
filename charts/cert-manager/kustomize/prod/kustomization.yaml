@@ -4,11 +4,11 @@ kind: Kustomization
 
 resources:
   - all.yaml
-  - certs.yaml
+#  - certs.yaml
 
-# secretGenerator:
-# - name: clouddns-dns01-solver-svc-acct
-#   files:
-#   - secrets/key.json
-# generatorOptions:
-#   disableNameSuffixHash: true
+secretGenerator:
+- name: clouddns-dns01-solver-svc-acct
+  files:
+  - secrets/key.json
+generatorOptions:
+  disableNameSuffixHash: true

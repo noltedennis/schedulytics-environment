@@ -60,4 +60,4 @@ for x in yaml.load_all(kustomize_out, Loader=yaml.FullLoader):
       print(yaml.dump(x))
 
 # Cleanup
-#os.remove(helm_out)
+os.remove(helm_out)

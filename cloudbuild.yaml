@@ -77,7 +77,7 @@ steps:
       - BUILDTARGET=$_CUSTOM_BUILDTARGET
 
   # Templating via Helm
-  - id: Template cert-manager
+  - id: Deploy cert-manager
     name: gcr.io/$PROJECT_ID/helm
     entrypoint: /bin/bash
     dir: charts/cert-manager
@@ -97,7 +97,7 @@ steps:
       - TILLERLESS=true
       - BUILDTARGET=$_CUSTOM_BUILDTARGET
 
-  - id: Template traefik
+  - id: Deploy traefik
     name: gcr.io/$PROJECT_ID/helm
     entrypoint: /bin/bash
     dir: charts/traefik
@@ -116,7 +116,7 @@ steps:
       - TILLERLESS=true
       - BUILDTARGET=$_CUSTOM_BUILDTARGET
 
-  - id: Template envoy
+  - id: Deploy envoy
     name: gcr.io/$PROJECT_ID/helm
     entrypoint: /bin/bash
     dir: charts/envoy
@@ -132,7 +132,7 @@ steps:
       - KUBECONFIG=/workspace/.kube/config
       - TILLERLESS=true
 
-  - id: Template mongodb
+  - id: Deploy mongodb
     name: gcr.io/$PROJECT_ID/helm
     entrypoint: /bin/bash
     dir: charts/mongodb
@@ -150,7 +150,7 @@ steps:
       - TILLERLESS=true
       - BUILDTARGET=$_CUSTOM_BUILDTARGET
 
-  - id: Template schedulytics-frontend
+  - id: Deploy schedulytics-frontend
     name: gcr.io/$PROJECT_ID/helm
     entrypoint: /bin/bash
     dir: charts/schedulytics-frontend
@@ -166,7 +166,7 @@ steps:
       - KUBECONFIG=/workspace/.kube/config
       - TILLERLESS=true
 
-  - id: Template schedulytics-grpc-server
+  - id: Deploy schedulytics-grpc-server
     name: gcr.io/$PROJECT_ID/helm
     entrypoint: /bin/bash
     dir: charts/schedulytics-grpc-server
