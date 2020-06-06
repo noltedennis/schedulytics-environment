@@ -40,7 +40,7 @@ kustomize_dir = Path('kustomize', build_target)
 helm_out = str(kustomize_dir / 'all.yaml')
 with open(helm_out, 'w') as text_file:
     objects = yaml.load_all(sys.stdin.read(), Loader=yaml.FullLoader)
-    text_file.write(yaml.dump_all(objects))
+    text_file.write(yaml.dump_all(objects, encoding=('utf-8')))
 
 # Execute kustomize on that and store result
 kustomize_out = subprocess.check_output('kubectl kustomize ' + str(kustomize_dir), shell=True)
@@ -51,12 +51,12 @@ ordered_kinds = ['CustomResourceDefinition' 'ValidatingWebhookConfiguration']
 for x in yaml.load_all(kustomize_out, Loader=yaml.FullLoader):
     if x['kind'] in ordered_kinds:
       print('---')
-      print(yaml.dump(x))
+      print(yaml.dump(x, encoding=('utf-8')))
 
 for x in yaml.load_all(kustomize_out, Loader=yaml.FullLoader):
     if x['kind'] not in ordered_kinds:
       print('---')
-      print(yaml.dump(x))
+      print(yaml.dump(x, encoding=('utf-8')))
 
 # Cleanup
 os.remove(helm_out)
