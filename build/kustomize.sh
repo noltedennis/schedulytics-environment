@@ -18,7 +18,7 @@ if [ -z ${BUILDTARGET} ]; then
   exit 1;
 fi
 
-KUSTOMIZE_DIR=${DIR}/${BUILDTARGET}
+KUSTOMIZE_DIR=${DIR}/kustomize/${BUILDTARGET}
 
 cat <&0 > ${KUSTOMIZE_DIR}/all.yaml
 
