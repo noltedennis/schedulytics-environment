@@ -103,7 +103,8 @@ steps:
       - -c
       - >
         helm upgrade -i traefik
-        --namespace default
+        --create-namespace
+        --namespace schedulytics
         -f ./charts/traefik/values.yaml
         --post-renderer ./charts/traefik/kustomize/kustomize.sh
         traefik/traefik
@@ -119,7 +120,8 @@ steps:
       - -c
       - >
         helm upgrade -i envoy
-        --namespace default
+        --create-namespace
+        --namespace schedulytics
         -f ./charts/envoy/values.yaml
         stable/envoy
     env:
@@ -133,7 +135,8 @@ steps:
       - -c
       - >
         helm upgrade -i mongodb
-        --namespace default
+        --create-namespace
+        --namespace schedulytics
         -f ./charts/mongodb/values.yaml
         --post-renderer ./charts/mongodb/kustomize/kustomize.sh
         bitnami/mongodb
@@ -149,7 +152,8 @@ steps:
       - -c
       - >
         helm upgrade -i schedulytics-frontend
-        --namespace default
+        --create-namespace
+        --namespace schedulytics
         -f ./charts/schedulytics-frontend/values.yaml
         ./charts/schedulytics-frontend
     env:
@@ -163,7 +167,8 @@ steps:
       - -c
       - >
         helm upgrade -i schedulytics-grpc-server
-        --namespace default
+        --create-namespace
+        --namespace schedulytics
         -f ./charts/schedulytics-grpc-server/values.yaml
         --post-renderer ./charts/schedulytics-grpc-server/kustomize/kustomize.sh
         ./charts/schedulytics-grpc-server
