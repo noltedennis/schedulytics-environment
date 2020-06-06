@@ -82,7 +82,7 @@ steps:
     entrypoint: /bin/bash
     args:
       - -c
-      - >
+      - |
         python3 -m venv build/python
         source build/python/bin/activate
         pip install pyyaml
