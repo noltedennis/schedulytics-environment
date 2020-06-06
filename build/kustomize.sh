@@ -22,6 +22,4 @@ KUSTOMIZE_DIR=${DIR}/kustomize/${BUILDTARGET}
 
 cat <&0 > ${KUSTOMIZE_DIR}/all.yaml
 
-ls -ltR ${KUSTOMIZE_DIR}
-
-kubectl kustomize ${KUSTOMIZE_DIR}
+# kubectl kustomize ${KUSTOMIZE_DIR}
