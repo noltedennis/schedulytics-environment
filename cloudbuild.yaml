@@ -83,10 +83,8 @@ steps:
     args:
       - -c
       - |
-        python3 -m venv build/python
-        source build/python/bin/activate
+        python --version
         pip install pyyaml
-        ls -ltR build/python
 
   # Templating via Helm
   - id: Template cert-manager
