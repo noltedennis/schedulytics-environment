@@ -84,8 +84,8 @@ steps:
     args:
       - -c
       - >
-        helm upgrade -i cert-manager
-        --debug
+        helm upgrade cert-manager
+        --install
         --create-namespace
         --namespace cert-manager
         -f values.yaml
@@ -104,8 +104,8 @@ steps:
     args:
       - -c
       - >
-        helm upgrade -i traefik
-        --debug
+        helm upgrade traefik
+        --install
         --create-namespace
         --namespace treafik
         -f values.yaml
