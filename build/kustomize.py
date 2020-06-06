@@ -49,15 +49,15 @@ kustomize_out = subprocess.check_output(['kubectl', 'kustomize', str(kustomize_d
 # Read results and output them according to priorization
 ordered_kinds = ['CustomResourceDefinition' 'ValidatingWebhookConfiguration']
 
-for x in yaml.load_all(kustomize_out):
+for x in yaml.load_all(yaml.load(input, Loader=yaml.FullLoader)):
     if x['kind'] in ordered_kinds:
       print('---')
-      print(yaml.dump(x))
+      print(yaml.dump(x),encoding=('utf-8'))
 
 for x in yaml.load_all(kustomize_out):
     if x['kind'] not in ordered_kinds:
       print('---')
-      print(yaml.dump(x))
+      print(yaml.dump(x,encoding=('utf-8'))
 
 # Cleanup
 os.remove(helm_out)
