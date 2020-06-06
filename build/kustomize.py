@@ -52,12 +52,12 @@ ordered_kinds = ['CustomResourceDefinition' 'ValidatingWebhookConfiguration']
 for x in yaml.load_all(yaml.load(input, Loader=yaml.FullLoader)):
     if x['kind'] in ordered_kinds:
       print('---')
-      print(yaml.dump(x),encoding=('utf-8'))
+      print(yaml.dump(x,encoding=('utf-8')))
 
 for x in yaml.load_all(kustomize_out):
     if x['kind'] not in ordered_kinds:
       print('---')
-      print(yaml.dump(x,encoding=('utf-8'))
+      print(yaml.dump(x,encoding=('utf-8')))
 
 # Cleanup
 os.remove(helm_out)
