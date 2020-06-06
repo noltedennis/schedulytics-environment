@@ -83,8 +83,8 @@ steps:
     args:
       - -c
       - |
-        python --version
-        pip install pyyaml
+        python3 --version
+        pip3 install pyyaml
 
   # Templating via Helm
   - id: Template cert-manager
