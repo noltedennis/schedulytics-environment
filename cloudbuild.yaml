@@ -66,8 +66,6 @@ steps:
     args: 
       - -c
       - | 
-          python --version
-          pip install pyyaml
           mkdir charts/cert-manager/kustomize/$${BUILDTARGET}/secrets
           mkdir charts/mongodb/kustomize/$${BUILDTARGET}/secrets
           mkdir charts/schedulytics-grpc-server/kustomize/$${BUILDTARGET}/secrets
@@ -77,6 +75,15 @@ steps:
           gcloud secrets versions access latest --secret=schedulytics-mongodb-user-password > charts/schedulytics-grpc-server/kustomize/$${BUILDTARGET}/secrets/schedulytics-mongodb-user-password
     env:
       - BUILDTARGET=$_CUSTOM_BUILDTARGET
+
+  # Prepare python
+  - id: Get python version
+    entrypoint: python3
+    args: ['--version']
+
+  - id: Prepare python installation
+    entrypoint: python3
+    args: ['-m pip install pyyaml']
   
   # Templating via Helm
   - id: Template cert-manager
