@@ -97,17 +97,6 @@ steps:
       - TILLERLESS=true
       - BUILDTARGET=$_CUSTOM_BUILDTARGET
 
-  - id: Debug cert-manager
-    name: gcr.io/cloud-builders/gcloud
-    entrypoint: 'bash'
-    args: 
-      - -c
-      - | 
-          ls -ltR charts/cert-manager/kustomize/$${BUILDTARGET}
-          cat charts/cert-manager/kustomize/$${BUILDTARGET}/all.yaml
-    env:
-      - BUILDTARGET=$_CUSTOM_BUILDTARGET
-
   - id: Template traefik
     name: gcr.io/$PROJECT_ID/helm
     entrypoint: /bin/bash
