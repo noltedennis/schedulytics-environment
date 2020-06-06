@@ -4,6 +4,7 @@ kind: Kustomization
 
 resources:
   - all.yaml
+  - certs.yaml
 
 secretGenerator:
 - name: clouddns-dns01-solver-svc-acct

@@ -90,7 +90,7 @@ steps:
         --namespace cert-manager
         -f values.yaml
         --version v0.15.1
-        --post-renderer /workspace/build/kustomize.sh
+        --post-renderer /workspace/build/kustomize.py
         jetstack/cert-manager
     env:
       - KUBECONFIG=/workspace/.kube/config
@@ -109,7 +109,7 @@ steps:
         --create-namespace
         --namespace traefik
         -f values.yaml
-        --post-renderer /workspace/build/kustomize.sh
+        --post-renderer /workspace/build/kustomize.py
         traefik/traefik
     env:
       - KUBECONFIG=/workspace/.kube/config
@@ -143,7 +143,7 @@ steps:
         --create-namespace
         --namespace schedulytics
         -f values.yaml
-        --post-renderer /workspace/build/kustomize.sh
+        --post-renderer /workspace/build/kustomize.py
         bitnami/mongodb
     env:
       - KUBECONFIG=/workspace/.kube/config
@@ -177,7 +177,7 @@ steps:
         --create-namespace
         --namespace schedulytics
         -f values.yaml
-        --post-renderer /workspace/build/kustomize.sh
+        --post-renderer /workspace/build/kustomize.py
         .
     env:
       - KUBECONFIG=/workspace/.kube/config
