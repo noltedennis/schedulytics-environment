@@ -38,8 +38,8 @@ kustomize_dir = Path('kustomize', build_target)
 
 # Read stdin and write to file
 helm_out = str(kustomize_dir / 'all.yaml')
-with open(helm_out, 'w') as text_file:
-    text_file.write(sys.stdin.read().encode('utf8','surrogateescape'))
+with open('kustomize/prod', 'w') as text_file:
+    text_file.write(sys.stdin.read())
 
 # Execute kustomize on that and store result
 kustomize_out = subprocess.check_output(['kubectl', 'kustomize', str(kustomize_dir)], shell=True)
