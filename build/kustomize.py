@@ -38,7 +38,7 @@ kustomize_dir = Path('kustomize', build_target)
 
 # Read stdin and write to file
 helm_out = str(kustomize_dir / 'all.yaml')
-with open('kustomize/prod', 'w') as text_file:
+with open('kustomize/prod/all.yaml', 'w') as text_file:
     text_file.write(sys.stdin.read())
 
 # Execute kustomize on that and store result
