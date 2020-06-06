@@ -22,4 +22,4 @@ KUSTOMIZE_DIR=${DIR}/kustomize/${BUILDTARGET}
 
 cat <&0 > ${KUSTOMIZE_DIR}/all.yaml
 
-kubectl kustomize ${KUSTOMIZE_DIR}
+kubectl kustomize --reorder kubectlapply ${KUSTOMIZE_DIR}
