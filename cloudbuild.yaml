@@ -15,14 +15,6 @@ steps:
       - CLOUDSDK_CONTAINER_CLUSTER=$_CUSTOM_CLUSTER
       - KUBECONFIG=/workspace/.kube/config
 
-  - id: Debug
-    name: gcr.io/$PROJECT_ID/helm
-    entrypoint: /bin/bash
-    args:
-      - -c
-      - |
-        python3 --version
-
   - id: Add jetstack repository for cert-manager
     name: gcr.io/$PROJECT_ID/helm
     args:
@@ -190,14 +182,4 @@ steps:
     env:
       - KUBECONFIG=/workspace/.kube/config
       - TILLERLESS=true
-      - BUILDTARGET=$_CUSTOM_BUILDTARGET
-
-  - id: Debug repo after CD
-    name: gcr.io/cloud-builders/gcloud
-    entrypoint: 'bash'
-    args: 
-      - -c
-      - | 
-          ls -ltR .
-    env:
       - BUILDTARGET=$_CUSTOM_BUILDTARGET

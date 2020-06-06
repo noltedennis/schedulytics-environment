@@ -37,24 +37,24 @@ if build_target != 'local' and build_target != 'prod':
 kustomize_dir = Path('kustomize', build_target)
 
 # Read stdin and write to file
-helm_out = kustomize_dir / 'all.yaml'
+helm_out = str(kustomize_dir / 'all.yaml')
 with open(helm_out, 'w') as text_file:
     text_file.write(sys.stdin.read())
 
 # Execute kustomize on that and store result
-kustomize_out = subprocess.check_output(["kubectl", 'kustomize', str(kustomize_dir)], shell=True)
+kustomize_out = subprocess.check_output(['kubectl', 'kustomize', str(kustomize_dir)], shell=True)
 
 # Read results and output them according to priorization
-ordered_kinds = ["CustomResourceDefinition" "ValidatingWebhookConfiguration"]
+ordered_kinds = ['CustomResourceDefinition' 'ValidatingWebhookConfiguration']
 
 for x in yaml.load_all(kustomize_out):
     if x['kind'] in ordered_kinds:
-      print("---")
+      print('---')
       print(yaml.dump(x))
 
 for x in yaml.load_all(kustomize_out):
     if x['kind'] not in ordered_kinds:
-      print("---")
+      print('---')
       print(yaml.dump(x))
 
 # Cleanup
