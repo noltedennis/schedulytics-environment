@@ -39,26 +39,25 @@ kustomize_dir = Path('kustomize', build_target)
 
 # Read stdin and write to file
 helm_out = str(kustomize_dir / 'all.yaml')
-with open(helm_out, 'wb') as text_file:
-    content = io.TextIOWrapper(sys.stdin.buffer, encoding='utf-8').read()
-    text_file.write(content.encode('utf-8'))
+with open(helm_out, 'w') as text_file:
+    objects = yaml.load_all(sys.stdin.read(), Loader=yaml.FullLoader)
+    text_file.write(yaml.dump_all(objects))
 
 # Execute kustomize on that and store result
 kustomize_out = subprocess.check_output(['kubectl', 'kustomize', str(kustomize_dir)], shell=True)
-print(content.encode('utf-8'))
 
 # Read results and output them according to priorization
 ordered_kinds = ['CustomResourceDefinition' 'ValidatingWebhookConfiguration']
 
-# for x in yaml.load_all(yaml.load(kustomize_out, Loader=yaml.FullLoader)):
-#     if x['kind'] in ordered_kinds:
-#       print('---')
-#       print(yaml.dump(x,encoding=('utf-8')))
+for x in yaml.load_all(kustomize_out, Loader=yaml.FullLoader):
+    if x['kind'] in ordered_kinds:
+      print('---')
+      print(yaml.dump(x))
 
-# for x in yaml.load_all(kustomize_out):
-#     if x['kind'] not in ordered_kinds:
-#       print('---')
-#       print(yaml.dump(x,encoding=('utf-8')))
+for x in yaml.load_all(kustomize_out, Loader=yaml.FullLoader):
+    if x['kind'] not in ordered_kinds:
+      print('---')
+      print(yaml.dump(x))
 
 # Cleanup
 os.remove(helm_out)

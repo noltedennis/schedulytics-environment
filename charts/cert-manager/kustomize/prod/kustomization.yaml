@@ -6,9 +6,9 @@ resources:
   - all.yaml
   - certs.yaml
 
-secretGenerator:
-- name: clouddns-dns01-solver-svc-acct
-  files:
-  - secrets/key.json
-generatorOptions:
-  disableNameSuffixHash: true
+# secretGenerator:
+# - name: clouddns-dns01-solver-svc-acct
+#   files:
+#   - secrets/key.json
+# generatorOptions:
+#   disableNameSuffixHash: true
