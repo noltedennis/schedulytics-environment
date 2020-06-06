@@ -39,7 +39,7 @@ kustomize_dir = Path('kustomize', build_target)
 
 # Read stdin and write to file
 helm_out = str(kustomize_dir / 'all.yaml')
-with open(helm_out, 'wb') as text_file:
+with open(helm_out, 'w') as text_file:
     input_stream = io.TextIOWrapper(sys.stdin.buffer, encoding='utf-8')
     text_file.write(input_stream.read())
 
