@@ -66,8 +66,6 @@ steps:
     args: 
       - -c
       - | 
-          cd ~
-          pwd
           mkdir charts/cert-manager/kustomize/$${BUILTARGET}/secrets
           mkdir charts/mongodb/kustomize/$${BUILTARGET}/secrets
           mkdir charts/schedulytics-grpc-server/kustomize/$${BUILTARGET}/secrets
@@ -92,7 +90,7 @@ steps:
         --namespace cert-manager
         -f values.yaml
         --version v0.15.1
-        --post-renderer ~/build/kustomize.sh
+        --post-renderer /workspace/build/kustomize.sh
         jetstack/cert-manager
     env:
       - KUBECONFIG=/workspace/.kube/config
@@ -110,7 +108,7 @@ steps:
         --create-namespace
         --namespace schedulytics
         -f values.yaml
-        --post-renderer ~/build/kustomize.sh
+        --post-renderer /workspace/build/kustomize.sh
         traefik/traefik
     env:
       - KUBECONFIG=/workspace/.kube/config
@@ -144,7 +142,7 @@ steps:
         --create-namespace
         --namespace schedulytics
         -f values.yaml
-        --post-renderer ~/build/kustomize.sh
+        --post-renderer /workspace/build/kustomize.sh
         bitnami/mongodb
     env:
       - KUBECONFIG=/workspace/.kube/config
@@ -178,7 +176,7 @@ steps:
         --create-namespace
         --namespace schedulytics
         -f values.yaml
-        --post-renderer ~/build/kustomize.sh
+        --post-renderer /workspace/build/kustomize.sh
         .
     env:
       - KUBECONFIG=/workspace/.kube/config
