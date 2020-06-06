@@ -15,8 +15,8 @@ steps:
       - CLOUDSDK_CONTAINER_CLUSTER=$_CUSTOM_CLUSTER
       - KUBECONFIG=/workspace/.kube/config
 
-    # Prepare python
-  - id: Get python version
+  # Python needs to be prepared - this could be baked into the image for faster builds
+  - id: Prepare Python installation
     name: gcr.io/$PROJECT_ID/helm
     entrypoint: /bin/bash
     args:
@@ -26,6 +26,14 @@ steps:
         apt-get install -y python3-pip
         pip3 install --upgrade pip
         pip3 install pyyaml
+
+  - id: Get python details
+    name: gcr.io/$PROJECT_ID/helm
+    entrypoint: /bin/bash
+    args:
+      - -c
+      - |
+        pip3 list
 
   - id: Add jetstack repository for cert-manager
     name: gcr.io/$PROJECT_ID/helm
