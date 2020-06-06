@@ -19,6 +19,7 @@ Output:
 Requires:
   - Local installation of kustomize (in PATH)
   - Python 3.4 or higher
+  - PyYAML
 """
 
 import os
