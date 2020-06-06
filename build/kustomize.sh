@@ -10,9 +10,8 @@
 #   BUILDTARGET         either "local" or "PROD"
 ############################################################################
 
-# Runtime information
-DIR=$(dirname $0)
-
+# Runtime information, base everything on caller directory
+DIR=$(pwd)
 
 if [ -z ${BUILDTARGET} ]; then
   echo "Variable BUILDTARGET must be defined"
@@ -24,5 +23,3 @@ KUSTOMIZE_DIR=${DIR}/${BUILDTARGET}
 cat <&0 > ${KUSTOMIZE_DIR}/all.yaml
 
 kubectl kustomize ${KUSTOMIZE_DIR}
-
-rm ${KUSTOMIZE_DIR}/all.yaml

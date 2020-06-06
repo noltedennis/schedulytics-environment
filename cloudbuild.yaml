@@ -66,6 +66,8 @@ steps:
     args: 
       - -c
       - | 
+          cd ~
+          pwd
           mkdir charts/cert-manager/kustomize/$${BUILTARGET}/secrets
           mkdir charts/mongodb/kustomize/$${BUILTARGET}/secrets
           mkdir charts/schedulytics-grpc-server/kustomize/$${BUILTARGET}/secrets
@@ -80,6 +82,7 @@ steps:
   - id: Template cert-manager
     name: gcr.io/$PROJECT_ID/helm
     entrypoint: /bin/bash
+    dir: charts/cert-manager
     args:
       - -c
       - >
@@ -87,9 +90,9 @@ steps:
         --debug
         --create-namespace
         --namespace cert-manager
-        -f ./charts/cert-manager/values.yaml
+        -f values.yaml
         --version v0.15.1
-        --post-renderer ./charts/cert-manager/kustomize/kustomize.sh
+        --post-renderer ~/build/kustomize.sh
         jetstack/cert-manager
     env:
       - KUBECONFIG=/workspace/.kube/config
@@ -99,14 +102,15 @@ steps:
   - id: Template traefik
     name: gcr.io/$PROJECT_ID/helm
     entrypoint: /bin/bash
+    dir: charts/traefik
     args:
       - -c
       - >
         helm upgrade -i traefik
         --create-namespace
         --namespace schedulytics
-        -f ./charts/traefik/values.yaml
-        --post-renderer ./charts/traefik/kustomize/kustomize.sh
+        -f values.yaml
+        --post-renderer ~/build/kustomize.sh
         traefik/traefik
     env:
       - KUBECONFIG=/workspace/.kube/config
@@ -116,13 +120,14 @@ steps:
   - id: Template envoy
     name: gcr.io/$PROJECT_ID/helm
     entrypoint: /bin/bash
+    dir: charts/envoy
     args:
       - -c
       - >
         helm upgrade -i envoy
         --create-namespace
         --namespace schedulytics
-        -f ./charts/envoy/values.yaml
+        -f values.yaml
         stable/envoy
     env:
       - KUBECONFIG=/workspace/.kube/config
@@ -131,14 +136,15 @@ steps:
   - id: Template mongodb
     name: gcr.io/$PROJECT_ID/helm
     entrypoint: /bin/bash
+    dir: charts/mongodb
     args:
       - -c
       - >
         helm upgrade -i mongodb
         --create-namespace
         --namespace schedulytics
-        -f ./charts/mongodb/values.yaml
-        --post-renderer ./charts/mongodb/kustomize/kustomize.sh
+        -f values.yaml
+        --post-renderer ~/build/kustomize.sh
         bitnami/mongodb
     env:
       - KUBECONFIG=/workspace/.kube/config
@@ -148,14 +154,15 @@ steps:
   - id: Template schedulytics-frontend
     name: gcr.io/$PROJECT_ID/helm
     entrypoint: /bin/bash
+    dir: charts/schedulytics-frontend
     args:
       - -c
       - >
         helm upgrade -i schedulytics-frontend
         --create-namespace
         --namespace schedulytics
-        -f ./charts/schedulytics-frontend/values.yaml
-        ./charts/schedulytics-frontend
+        -f values.yaml
+        .
     env:
       - KUBECONFIG=/workspace/.kube/config
       - TILLERLESS=true
@@ -163,15 +170,16 @@ steps:
   - id: Template schedulytics-grpc-server
     name: gcr.io/$PROJECT_ID/helm
     entrypoint: /bin/bash
+    dir: charts/schedulytics-grpc-server
     args:
       - -c
       - >
         helm upgrade -i schedulytics-grpc-server
         --create-namespace
         --namespace schedulytics
-        -f ./charts/schedulytics-grpc-server/values.yaml
-        --post-renderer ./charts/schedulytics-grpc-server/kustomize/kustomize.sh
-        ./charts/schedulytics-grpc-server
+        -f values.yaml
+        --post-renderer ~/build/kustomize.sh
+        .
     env:
       - KUBECONFIG=/workspace/.kube/config
       - TILLERLESS=true
