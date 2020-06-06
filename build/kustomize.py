@@ -39,7 +39,7 @@ kustomize_dir = Path('kustomize', build_target)
 
 # Read stdin and write to file
 helm_out = str(kustomize_dir / 'all.yaml')
-with io.open(helm_out, 'w', encoding='utf8') as text_file:
+with io.open("temporary.yaml", 'w', encoding='utf8') as text_file:
     helm_template = io.TextIOWrapper(sys.stdin.buffer, encoding='utf-8').read()
     text_file.write(helm_template)
 
@@ -52,12 +52,12 @@ ordered_kinds = ['CustomResourceDefinition' 'ValidatingWebhookConfiguration']
 for x in yaml.load_all(kustomize_out, Loader=yaml.FullLoader):
     if x['kind'] in ordered_kinds:
       print('---')
-      print(yaml.dump(x, encoding=('utf-8')))
+      print(yaml.dump(x))
 
 for x in yaml.load_all(kustomize_out, Loader=yaml.FullLoader):
     if x['kind'] not in ordered_kinds:
       print('---')
-      print(yaml.dump(x, encoding=('utf-8')))
+      print(yaml.dump(x))
 
 # Cleanup
-os.remove(helm_out)
+#os.remove(helm_out)
