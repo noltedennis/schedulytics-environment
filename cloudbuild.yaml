@@ -15,7 +15,7 @@ steps:
       - CLOUDSDK_CONTAINER_CLUSTER=$_CUSTOM_CLUSTER
       - KUBECONFIG=/workspace/.kube/config
 
-  - id: Template cert-manager
+  - id: Debug
     name: gcr.io/$PROJECT_ID/helm
     entrypoint: /bin/bash
     args:
