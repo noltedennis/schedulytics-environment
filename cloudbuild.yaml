@@ -96,7 +96,6 @@ steps:
       - KUBECONFIG=/workspace/.kube/config
       - TILLERLESS=true
       - BUILDTARGET=$_CUSTOM_BUILDTARGET
-      - PYTHONIOENCODING=utf8
 
   - id: Template traefik
     name: gcr.io/$PROJECT_ID/helm
