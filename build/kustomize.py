@@ -18,7 +18,7 @@ Output:
 
 Requires:
   - Local installation of kustomize (in PATH)
-  - Python 3.4 or higher
+  - Python 3.6 or higher
   - PyYAML
 """
 

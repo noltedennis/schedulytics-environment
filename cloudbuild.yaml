@@ -15,6 +15,14 @@ steps:
       - CLOUDSDK_CONTAINER_CLUSTER=$_CUSTOM_CLUSTER
       - KUBECONFIG=/workspace/.kube/config
 
+  - id: Template cert-manager
+    name: gcr.io/$PROJECT_ID/helm
+    entrypoint: /bin/bash
+    args:
+      - -c
+      - |
+        python3 --version
+
   - id: Add jetstack repository for cert-manager
     name: gcr.io/$PROJECT_ID/helm
     args:
