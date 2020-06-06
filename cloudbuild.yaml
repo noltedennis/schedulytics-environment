@@ -183,3 +183,13 @@ steps:
       - KUBECONFIG=/workspace/.kube/config
       - TILLERLESS=true
       - BUILDTARGET=$_CUSTOM_BUILDTARGET
+
+  - id: Debug repo after CD
+    name: gcr.io/cloud-builders/gcloud
+    entrypoint: 'bash'
+    args: 
+      - -c
+      - | 
+          ls -ltR .
+    env:
+      - BUILDTARGET=$_CUSTOM_BUILDTARGET
