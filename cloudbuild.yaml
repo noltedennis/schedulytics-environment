@@ -78,10 +78,12 @@ steps:
 
   # Prepare python
   - id: Get python version
+    name: gcr.io/$PROJECT_ID/helm
     entrypoint: python3
     args: ['--version']
 
   - id: Prepare python installation
+    name: gcr.io/$PROJECT_ID/helm
     entrypoint: python3
     args: ['-m pip install pyyaml']
   
