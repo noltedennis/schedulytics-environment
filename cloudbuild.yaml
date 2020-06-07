@@ -85,7 +85,7 @@ steps:
       - -c
       - |
         kubectl apply --validate=false -f https://github.com/jetstack/cert-manager/releases/download/v0.15.1/cert-manager.crds.yaml
-        kubectl apply --validate=false -f https://github.com/containous/traefik-helm-chart/tree/master/traefik/crds
+        curl https://api.github.com/repos/containous/traefik-helm-chart/contents/traefik/crds | jq -r .[].download_url | xargs -L 1 kubectl apply --validate=false -f
     env:
       - KUBECONFIG=/workspace/.kube/config
       - TILLERLESS=true
