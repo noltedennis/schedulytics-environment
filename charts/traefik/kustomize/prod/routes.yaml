@@ -7,8 +7,7 @@ metadata:
   namespace: traefik
 spec:
   defaultCertificate:
-    secretName: denolte-com-tls
-    namespace: cert-manager
+    secretName: cert-manager/denolte-com-tls
 
 ---
 apiVersion: traefik.containo.us/v1alpha1
