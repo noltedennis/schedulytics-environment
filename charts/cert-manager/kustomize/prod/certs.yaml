@@ -33,7 +33,8 @@ spec:
   secretName: denolte-com-tls
   issuerRef:
     name: letsencrypt
-    kind: ClusterIssuer
+    kind: Issuer
+    namespace: cert-manager
   dnsNames:
   - 'denolte.com'
   - '*.denolte.com'
