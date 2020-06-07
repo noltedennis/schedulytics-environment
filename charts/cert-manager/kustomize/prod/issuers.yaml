@@ -1,9 +1,8 @@
 ---
 apiVersion: cert-manager.io/v1alpha2
-kind: Issuer
+kind: ClusterIssuer
 metadata:
   name: letsencrypt
-  namespace: cert-manager
 spec:
   acme:
     # You must replace this email address with your own.
@@ -23,17 +22,3 @@ spec:
           serviceAccountSecretRef:
             name: clouddns-dns01-solver-svc-acct
             key: key.json
----
-apiVersion: cert-manager.io/v1alpha2
-kind: Certificate
-metadata:
-  name: denolte-com
-  namespace: cert-manager
-spec:
-  secretName: denolte-com-tls
-  issuerRef:
-    name: letsencrypt
-    kind: Issuer
-  dnsNames:
-  - 'denolte.com'
-  - '*.denolte.com'
