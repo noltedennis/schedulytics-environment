@@ -4,7 +4,7 @@
 replicaCount: 1
 image:
   repository: gcr.io/schedulytics-278820/schedulytics-grpc-server
-  tag: 4d7817fbb1aa2e478b7f78e7efd79109c14bdc40
+  tag: e11decff2705d7dc790ab5f11288d27e980f9599
   pullPolicy: IfNotPresent
 service:
   name: schedulytics-server
