@@ -4,5 +4,3 @@ kind: Kustomization
 
 resources:
   - all.yaml
-  - certs.yaml
-  - routes.yaml
