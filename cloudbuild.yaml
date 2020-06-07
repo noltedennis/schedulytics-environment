@@ -76,6 +76,21 @@ steps:
     env:
       - BUILDTARGET=$_CUSTOM_BUILDTARGET
 
+  # Apply CRDs because Helm template can lead do validation issues (client API takes time to invalidate cache and might break deployments)
+  # Also CRDs cannot be templated and thus do not need the rendering
+  - id: Deploy CRDs
+    name: gcr.io/$PROJECT_ID/helm
+    entrypoint: /bin/bash
+    args:
+      - -c
+      - |
+        kubectl apply --validate=false -f https://github.com/jetstack/cert-manager/releases/download/v0.15.1/cert-manager.crds.yaml
+        kubectl apply --validate=false -f https://containous.github.io/traefik-helm-chart/traefik/crds
+    env:
+      - KUBECONFIG=/workspace/.kube/config
+      - TILLERLESS=true
+      - BUILDTARGET=$_CUSTOM_BUILDTARGET
+
   # Templating via Helm
   - id: Deploy cert-manager
     name: gcr.io/$PROJECT_ID/helm
@@ -90,7 +105,7 @@ steps:
         --namespace cert-manager
         -f values.yaml
         --version v0.15.1
-        --disable-openapi-validation
+        --skip-crds
         --post-renderer /workspace/build/kustomize.py
         jetstack/cert-manager
     env:
@@ -110,6 +125,7 @@ steps:
         --create-namespace
         --namespace traefik
         -f values.yaml
+        --skip-crds
         --post-renderer /workspace/build/kustomize.py
         traefik/traefik
     env:

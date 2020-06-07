@@ -5,8 +5,6 @@ kustomize.py
 This script is designed to be used as environment-independant
 post-renderer for Helm. It will take stdin and include it in its
 kustomize build of the relative directory kustomize/${BUILDTARGET}.
-In addition, it will order certain resource kinds to be created first,
-because kustomize currently lacks inter-dependency ordering.
 
 Required inputs:
   STDIN       - Output from Helm template
@@ -46,18 +44,10 @@ with io.open(helm_out, 'w', encoding='utf8') as text_file:
 # Execute kustomize on that and store result
 kustomize_out = subprocess.check_output('kubectl kustomize ' + str(kustomize_dir), shell=True)
 
-# Read results and output them according to priorization
-ordered_kinds = ['CustomResourceDefinition' 'ValidatingWebhookConfiguration']
-
+# Read results and output them
 for x in yaml.load_all(kustomize_out, Loader=yaml.FullLoader):
-    if x['kind'] in ordered_kinds:
-      print('---')
-      print(yaml.dump(x))
-
-for x in yaml.load_all(kustomize_out, Loader=yaml.FullLoader):
-    if x['kind'] not in ordered_kinds:
-      print('---')
-      print(yaml.dump(x))
+    print('---')
+    print(yaml.dump(x))
 
 # Cleanup
 os.remove(helm_out)
