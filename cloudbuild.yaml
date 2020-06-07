@@ -90,6 +90,7 @@ steps:
         --namespace cert-manager
         -f values.yaml
         --version v0.15.1
+        --validate
         --post-renderer /workspace/build/kustomize.py
         jetstack/cert-manager
     env:
